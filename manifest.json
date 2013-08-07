@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+
+  "name": "Switchr",
+  "description": "A chrome extension that allows you to switch tabs by swiping. (using a LEAP device)",
+  "version": "1.0",
+
+  "permissions": [
+    "tabs"
+  ],
+  "background": {
+    "scripts": ["leap.min.js","background.js"]
+  }
+}
