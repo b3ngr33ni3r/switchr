@@ -6,9 +6,17 @@
   "version": "1.0",
 
   "permissions": [
-    "tabs"
+    "tabs",
+	"storage"
   ],
   "background": {
-    "scripts": ["leap.min.js","background.js"]
+    "scripts": ["jquery.min.js","leap.min.js","background.js"]
+  },
+  "browser_action": {
+    "default_icon": {                    // optional
+      "19": "icon19.png"           // optional
+    },
+    "default_title": "Switchr",      // optional; shown in tooltip
+    "default_popup": "popup.html"        // optional
   }
 }

@@ -1,0 +1,31 @@
+ <html>
+ <body>
+  <label> Timeout :
+  <input id="timeoutValue" type="range" name="points" min="10000" max="9000000"/>
+  </label>
+  <label> Swipe Distance :
+  <input id="timeoutValue" type="range" name="points" min="20" max="500"/>
+  </label>
+ 
+ <button onclick="storeTimeoutValue();"> Save </button>
+ <script>
+ chrome.storage.sync.get(["timeoutValue","swipeDistance"],function(res){
+	if (res.items.timeoutValue != undefined)
+		document.getElementById('timeoutValue').value = res.items.timeoutValue;
+	if (res.items.swipeDistance != undefined)
+		document.getElementById('swipeDistance').value = res.items.swipeDistance;	
+ });
+ 
+ function storeTimeoutValue(){
+	 chrome.storage.sync.set({'timeoutValue': document.getElementById('timeoutValue').value}, function() {
+		showNotification("Settings Saved");
+	 });
+ }
+ 
+ function showNotification(message)
+ {
+	alert(message);
+ }
+ </script>
+ </body>
+ </html>

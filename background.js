@@ -8,6 +8,19 @@ var Vector = function(x,y,z)
 var positions = [];
 var staleStamps = [-1,-1,-1];
 
+var settings = {timeoutValue:2000000,swipeDistance:200};
+chrome.storage.sync.get(["timeoutValue","swipeDistance"],function(res)
+{
+	$.extend(settings,res.items);
+});
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+	if (namespace == "sync")
+		for (key in changes) {
+			var storageChange = changes[key];
+			settings.key = storageChange.newValue;
+		}
+});
+
 Leap.loop(function(frame)
 {
 	var hands = frame.hands;
@@ -21,10 +34,11 @@ Leap.loop(function(frame)
 			
 			positions.push(location);
 			
-			if (MaxAbsValue(velocity,"x") && velocity.x > 0 && PreviousPositionsContain(200,"x"))
+			if (MaxAbsValue(velocity,"x") && velocity.x > 0 && PreviousPositionsContain(settings.swipeDistance,"x"))
             {
-				if (staleStamps[0] == -1 || (staleStamps[0] != -1 && staleStamps[0] <= frame.timestamp - 2000000))
+				if (staleStamps[0] == -1 || (staleStamps[0] != -1 && staleStamps[0] <= frame.timestamp - settings.timeoutValue))
 				{
+					console.log(settings);
 					staleStamps[0] = frame.timestamp;
 					chrome.windows.getCurrent({},function(window){
 						if (window.focused)
@@ -46,9 +60,9 @@ Leap.loop(function(frame)
 					RecognizedEvent();
 				}
 			}
-			else if (MaxAbsValue(velocity, "x") && velocity.x < 0 && PreviousPositionsContain(200, "x"))
+			else if (MaxAbsValue(velocity, "x") && velocity.x < 0 && PreviousPositionsContain(settings.swipeDistance, "x"))
 			{
-				if (staleStamps[1] == -1 || (staleStamps[1] != -1 && staleStamps[1] <= frame.timestamp - 2000000))
+				if (staleStamps[1] == -1 || (staleStamps[1] != -1 && staleStamps[1] <= frame.timestamp - settings.timeoutValue))
 				{
 					staleStamps[1] = frame.timestamp;
 					chrome.windows.getCurrent({},function(window){
