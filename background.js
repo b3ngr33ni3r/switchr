@@ -11,13 +11,15 @@ var staleStamps = [-1,-1,-1];
 var settings = {timeoutValue:2000000,swipeDistance:200};
 chrome.storage.sync.get(["timeoutValue","swipeDistance"],function(res)
 {
-	$.extend(settings,res.items);
+	if (typeof(res)!=='undefined' && typeof(res["timeoutValue"])!=='undefined' && typeof(res["swipeDistance"])!=='undefined')
+		settings = res;
 });
 chrome.storage.onChanged.addListener(function(changes, namespace) {
+	console.log("change in "+namespace);
 	if (namespace == "sync")
 		for (key in changes) {
 			var storageChange = changes[key];
-			settings.key = storageChange.newValue;
+			settings[key] = storageChange.newValue;
 		}
 });
 
